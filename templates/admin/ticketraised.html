@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            background: rgba(44, 62, 80, 1);
+            color: white;
+            padding: 20px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .sidebar nav a {
+            display: block;
+            color: #bdc3c7;
+            padding: 12px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+            border-radius: 5px;
+        }
+
+        .sidebar nav a:hover, .sidebar nav a.active {
+            background: #3498db;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+           
+            min-height: 100vh;
+            border-radius: 10px;
+            
+        }
+
+        .info-container {
+            color: white;
+            background: #34495e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .info-container:hover {
+            transform: scale(1.02);
+        }
+
+        .card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-item {
+            
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .info-item label {
+            
+            color: white;
+            font-weight: bold;
+            width: 100px;
+        }
+
+        .info-item div {
+            background: #34495e;
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #enquiry {
+            min-height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo mb-4">
+            <h3 style="font-weight: 400;"> CustomerService</h3>
+        </div>
+        <nav>
+            <a href="/servicebooked"><i class="fas fa-user-plus"></i> Service Booked</a>
+            <a href="/aadmin"><i class="fa fa-home"></i> Home</a>
+            <a href="/addemp"><i class="fas fa-user-plus"></i> Add Employee</a>
+            <a href="/employeeinfo"><i class="fas fa-user-tie"></i> Employee List</a>
+            <a href="/userinfo"><i class="fas fa-users"></i> Customer List</a>
+
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Ticket Raised</h2>
+            <div class="admin-pro5file">
+                <span class="me-2">Admin</span>
+                <i class="fas fa-user-circle fa-2x"></i>
+            </div>
+        </header>
+
+        {% for i in data reversed %}
+        <!-- User Information -->
+        <div class="info-container">
+            <div class="info-item">
+                <label for="id">ID:</label>
+                <div id="id">{{i.unique}}</div>
+            </div>
+            <div class="info-item">
+                <label for="email">Email :</label>
+                <div id="email">{{i.mail}}</div>
+            </div>
+            <div class="info-item">
+                <label for="enquiry">Phone :</label>
+                <div id="enquiry">{{i.phone}}</div>
+            </div>
+            <div class="info-item">
+                <label for="enquiry">Enquiry :</label>
+                <div id="enquiry">{{i.ticketdetail}}</div>
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

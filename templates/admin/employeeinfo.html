@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Information</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            background: rgba(44, 62, 80, 1);
+            color: white;
+            padding: 20px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        .sidebar nav a {
+            display: block;
+            color: #bdc3c7;
+            padding: 12px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+            border-radius: 5px;
+        }
+        .sidebar nav a:hover {
+            background: #3498db;
+            transform: scale(1.05);
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
+        }
+        .ma {
+            padding: 25px;
+            margin-bottom: 10px;
+            background: #34495e;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            transition: transform 0.3s;
+            justify-content: space-between;
+        }
+        .ma:hover {
+            transform: translateY(-3px);
+        }
+        .profile-image-section {
+            width: 180px;
+            height: 230px;
+            border: 3px solid #3498db;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .employee-info {
+            font-size: 1.1rem;
+            margin-left: 30px;
+            flex-grow: 1;
+            position: relative;
+        }
+        .employee-name {
+            font-weight: 650;
+            color: white;
+            font-size: 2.0rem;
+            margin-bottom: 15px;
+        }
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .detail-label {
+            color: #bdc3c7;
+            width: 140px;
+            font-weight: 600;
+        }
+        .detail-value {
+            color: white;
+            font-size: 1.2rem;
+        }
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s ease-in-out;
+        
+            right: 0;
+            bottom: 0;
+            
+        }
+        .delete-btn:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo mb-4">
+            <h3 style="font-weight: 400;">CustomerService</h3>
+        </div>
+        <nav>
+            <a href="/servicebooked"><i class="fas fa-user-plus"></i> Service Booked</a>
+            <a href="/aadmin"><i class="fa fa-home"></i> Home</a>
+            <a href="/addemp"><i class="fas fa-user-plus"></i> Add Employee</a>
+            <a href="/userinfo"><i class="fas fa-users"></i> Customer List</a>
+            <a href="/ticketraised"><i class="fa fa-ticket"></i> Tickets Raised</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Employee List</h2>
+            <div class="admin-profile">
+                <span>Admin</span>
+                <i class="fas fa-user-circle fa-2x"></i>
+            </div>
+        </header>
+
+        <div class="employee-list">
+            {% for i in data reversed %}
+            <div class="ma">
+                <a href="{% url 'employeeinfocommon' i.unique %}" style="text-decoration: none; display: flex; flex-grow: 1;">
+                    <div class="profile-image-section">
+                        <img src="{{ i.profile_image }}" class="profile-image" alt="Employee Photo">
+                    </div>
+                    <div class="employee-info">
+                        <h2 class="employee-name">{{ i.name }}</h2>
+                        <div class="detail-item">
+                            <span class="detail-label">Service:</span>
+                            <span class="detail-value">{{ i.service_provided }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Phone:</span>
+                            <span class="detail-value">{{ i.phone }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Email:</span>
+                            <span class="detail-value">{{ i.email }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Specialization:</span>
+                            <span class="detail-value">{{ i.specialization }}</span>
+                        </div>
+                    </div>
+                </a>
+           
+                
+            </div>
+            {% empty %}
+            <div class="text-center py-4">
+                <p class="text-muted">No employees found matching your search criteria.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

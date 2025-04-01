@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            background: rgba(44, 62, 80, 1);
+            color: white;
+            padding: 20px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        .sidebar:hover {
+            background: rgba(44, 62, 80, 1);
+        }
+        .sidebar nav a {
+            display: block;
+            color: #bdc3c7;
+            padding: 12px;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+            border-radius: 5px;
+        }
+        .sidebar nav a:hover, .sidebar nav a.active {
+            background: #3498db;
+            color: white;
+            transform: scale(1.05);
+        }
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+            min-height: 100vh;
+            border-radius: 10px;
+            color: black;
+        }
+        .info-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .info-container:hover {
+            transform: scale(1.02);
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .info-item label {
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 120px;
+        }
+        .card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .carousel img {
+            width: 100%;
+            height: 425px;
+            border-radius: 10px;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo mb-4">
+            <h3 style="font-weight: 400;"> CustomerService</h3>
+        </div>
+        <nav>
+            <a href="/servicebooked"><i class="fas fa-user-plus"></i> Service Booked</a>
+            <a href="/addemp"><i class="fas fa-user-plus"></i> Add Employee</a>
+            <a href="/employeeinfo"><i class="fas fa-user-tie"></i> Employee List</a>
+            <a href="/userinfo"><i class="fas fa-users"></i> Customer List</a>
+            <a href="/ticketraised"><i class="fa fa-ticket"></i> Tickets Raised</a>
+        </nav>
+  </div>
+    <div class="main-content">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Dashboard</h2>
+            <div class="admin-profile">
+                <span class="me-2" style="align-items: center;" >Admin</span>
+                <i class="fas fa-user-circle fa-2x" style="margin-top: 5px;"></i>
+            </div>
+        </header>
+       
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white text-center p-3">
+                    <i class="fas fa-users fa-2x"></i>
+                    <h5>Total Users</h5>
+                    <h2>{{data1}}</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white text-center p-3">
+                    <i class="fas fa-user-tie fa-2x"></i>
+                    <h5>Total Employee</h5>
+                    <h2>{{data2}}</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white text-center p-3">
+                    <i class="fa fa-wrench fa-2x"></i>
+                    <h5>Services</h5>
+                    <h2>10</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white text-center p-3">
+                    <i class="fa fa-ticket fa-2x"></i>
+                    <h5>Tickets</h5>
+                    <h2>{{data3}}</h2>
+                </div>
+        </div>
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/static/admin/image1.jpg" class="d-block w-100" alt="Slide 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="/static/admin/image2.jpg" class="d-block w-100" alt="Slide 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="/static/admin/image3.jpg" class="d-block w-100" alt="Slide 3">
+                </div>
+                <div class="carousel-item">
+                    <img src="/static/admin/image4.jpg" class="d-block w-100" alt="Slide 4">
+                </div>
+                <div class="carousel-item">
+                    <img src="/static/admin/image5.jpg" class="d-block w-100" alt="Slide 5">
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            var myCarousel = new bootstrap.Carousel(document.querySelector('#carouselExample'), {
+                interval: 3000,
+                ride: 'carousel'
+            });
+        </script>
+         <!--CustomerService. All backend dtatabase rights reserved .  Unauthorized reproduction, distribution, or modification of any content on this website is strictly prohibited. Reserved by Hitendra Hemraj Yeole .-->
+
+</body>
+</html>
