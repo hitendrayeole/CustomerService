@@ -109,6 +109,37 @@
             background-color: #c0392b;
             transform: scale(1.05);
         }
+        /* Updated Search Styling */
+        .search-container {
+            max-width: 600px;
+            margin: 0 0 2rem;
+        }
+        .search-form .form-control {
+            padding: 12px 20px;
+            border: 2px solid #2c3e50;
+            border-radius: 8px 0 0 8px;
+            background: #ecf0f1;
+            transition: all 0.3s ease;
+        }
+        .search-form .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background: white;
+        }
+        .search-form .btn-search {
+            padding: 12px 25px;
+            border-radius: 0 8px 8px 0;
+            background: #2c3e50;
+            color: white;
+            border: 2px solid #2c3e50;
+            border-left: none;
+            transition: all 0.3s ease;
+        }
+        .search-form .btn-search:hover {
+            background: #3498db;
+            border-color: #3498db;
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -133,6 +164,21 @@
                 <i class="fas fa-user-circle fa-2x"></i>
             </div>
         </header>
+
+        
+             <!-- Search Form -->
+             <div class="mb-4">
+                <form method="GET" action="{% url 'employeeinfo' %}" class="search-form">
+                    <div class="input-group search-container">
+                        <input type="text" name="q" class="form-control" 
+                               placeholder="Search customers by name, email, phone, or address..." 
+                               value="{{ search_query }}">
+                        <button class="btn btn-search" type="submit">
+                            <i class="fas fa-search me-2"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
 
         <div class="employee-list">
             {% for i in data reversed %}

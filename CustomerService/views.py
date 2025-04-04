@@ -51,34 +51,56 @@ def signup(request):
 
 def signin(request):
     if request.method == 'POST':
-        mail = request.POST['mail']
-        ps = request.POST['pass']
+        mail = request.POST.get('mail')
+        password = request.POST.get('pass')
 
+        if not mail or not password:
+            return HttpResponseRedirect('/signin')
+
+        # 1. First check if it's admin
+        if mail == 'admin@gmail.com':
+            try:
+                admin_user = Cdetail.objects.get(mail=mail, passw=password)
+                response = redirect('/aadmin')
+                response.set_cookie('user_name', admin_user.name, max_age=604800)
+                response.set_cookie('user_email', admin_user.mail, max_age=604800)
+                response.set_cookie('user_type', 'admin', max_age=604800)  # Add user type
+                return response
+            except Cdetail.DoesNotExist:
+                return HttpResponseRedirect('/signin')
+
+        # 2. Check if it's an employee
         try:
-            # Get the user instance matching mail and password
-            user = Cdetail.objects.get(mail=mail, passw=ps)
+            employee = Employee.objects.get(email=mail,passw=password)
+            # In your Employee model, there's no password field, so we're only checking email
+            # If you want password auth for employees, add passw field to Employee model
+            response = redirect('/employeeservicebooked')
+            response.set_cookie('user_name', employee.name, max_age=604800)
+            response.set_cookie('user_email', employee.email, max_age=604800)
+            response.set_cookie('user_phone', employee.phone, max_age=604800)
+            response.set_cookie('user_type', 'employee', max_age=604800)  # Add user type
+            profile_image_url = employee.profile_image if employee.profile_image else 'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg'
+            response.set_cookie('user_image', profile_image_url, max_age=604800)
+            return response
+        except Employee.DoesNotExist:
+            pass  # Not an employee, continue to check regular user
 
-            # Admin check
-            if mail == 'admin@gmail.com':
-                return HttpResponseRedirect('/aadmin')
-
-            # Set cookies and redirect to user page
+        # 3. Check if it's a regular user
+        try:
+            user = Cdetail.objects.get(mail=mail, passw=password)
             response = redirect('/bookservice')
             response.set_cookie('user_name', user.name, max_age=604800)
             response.set_cookie('user_email', user.mail, max_age=604800)
             response.set_cookie('user_phone', user.phone, max_age=604800)
-
-            # If user has a profile image, use it; else fallback image URL
+            response.set_cookie('user_type', 'user', max_age=604800)  # Add user type
             profile_image_url = user.profile_image if user.profile_image else 'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg'
             response.set_cookie('user_image', profile_image_url, max_age=604800)
-
             return response
-
         except Cdetail.DoesNotExist:
             # Invalid credentials
             return HttpResponseRedirect('/signin')
 
-    return render(request, 'templates/home/signin.html')                                          
+    return render(request, 'templates/home/signin.html')                                   
 
 
 def contact(request):
@@ -134,6 +156,7 @@ def addemp(request):
             name = request.POST['name']
             phone = int(request.POST['phone'])
             email = request.POST['email']
+            passw = request.POST['passw']
             gender = request.POST['gender']
             address = request.POST['address']
             service_provided = request.POST['service_provided']
@@ -147,6 +170,7 @@ def addemp(request):
                 name=name,
                 phone=phone,
                 email=email,
+                passw=passw,
                 gender=gender,
                 address=address,
                 service_provided=service_provided,
@@ -383,4 +407,43 @@ def toggle_favorite(request, employee_id):
     
     except (Cdetail.DoesNotExist, Employee.DoesNotExist):
         return JsonResponse({'status': 'error', 'message': 'Not found'}, status=404)
-   
+    
+def employeeservicebooked(request):
+    # Get the logged-in employee's email from cookies
+    employee_email = request.COOKIES.get('user_email')
+    
+    if not employee_email:
+        # If no employee is logged in, return empty context
+        context = {'combined_list': []}
+        return render(request, 'templates/employee/employeeservicebooked.html', context)
+    
+    # Get the employee record for the logged-in user
+    try:
+        employee = Employee.objects.get(email=employee_email)
+    except Employee.DoesNotExist:
+        # If employee doesn't exist, return empty context
+        context = {'combined_list': []}
+        return render(request, 'templates/employee/employeeservicebooked.html', context)
+    
+    # Get only bookings for this employee
+    bookings = Bookings.objects.filter(uniqueservice=employee.unique)
+    users = Cdetail.objects.all()
+
+    # Create dictionary for user lookup
+    user_dict = {user.unique: user for user in users}
+
+    combined = []
+    for booking in bookings:
+        user = user_dict.get(booking.uniqueuser)
+        if user:
+            combined.append({
+                'booking_unique': booking.unique,    
+                'user': user,                        
+                'service': employee,  # We already have the employee object                
+                'advance': booking.advance           
+            })
+
+    context = {
+        'combined_list': combined
+    }
+    return render(request, 'templates/employee/employeeservicebooked.html', context)

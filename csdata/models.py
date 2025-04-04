@@ -2,6 +2,8 @@ from django.db import models
 
 def get_default_service():
     return []
+def get_default_servic():
+    return "abc123@"
 class Cdetail(models.Model):
     unique=models.AutoField(primary_key=True)
     profile_image = models.CharField(max_length=5000)
@@ -26,6 +28,7 @@ class Employee(models.Model):
     name = models.CharField(max_length=70)
     phone = models.IntegerField()
     email = models.CharField(max_length=100)
+    passw=models.CharField(max_length=30,default=get_default_servic)
     gender = models.CharField(max_length=10)
     address = models.TextField(max_length=600)
     service_provided = models.CharField(max_length=500)
